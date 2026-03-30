@@ -5,6 +5,9 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --amber: #F0A832;
+  --amber-dim: rgba(240, 168, 50, 0.15);
+  --amber-glow: rgba(240, 168, 50, 0.08);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -25,3 +28,36 @@ body {
     text-wrap: balance;
   }
 }
+
+/* ── Quote page input focus ring ── */
+.amber-input {
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.amber-input:focus {
+  outline: none;
+  border-color: rgba(240, 168, 50, 0.65) !important;
+  box-shadow: 0 0 0 3px rgba(240, 168, 50, 0.1), 0 1px 3px rgba(0, 0, 0, 0.3);
+  background-color: rgba(240, 168, 50, 0.03) !important;
+}
+
+.amber-input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ── Spinner keyframe (for loading state) ── */
+@keyframes amber-spin {
+  to { transform: rotate(360deg); }
+}
+
+.spin {
+  animation: amber-spin 0.75s linear infinite;
+}
+
+/* ── Stagger utility ── */
+.delay-100 { animation-delay: 0.1s; }
+.delay-200 { animation-delay: 0.2s; }
+.delay-300 { animation-delay: 0.3s; }
+.delay-400 { animation-delay: 0.4s; }
+.delay-500 { animation-delay: 0.5s; }
