@@ -22,12 +22,10 @@ export async function POST(req: NextRequest) {
         records: [
           {
             fields: {
-              Name: name,
-              Email: email,
-              Company: company || '',
-              T1_Expertise: expertise,
-              Source: 'landing_page',
-              Status: 'lead',
+              Legal_Name: company || name,
+              Representative_Name: name,
+              Representative_Email: email,
+              Registration_Status: 'lead',
             },
           },
         ],
