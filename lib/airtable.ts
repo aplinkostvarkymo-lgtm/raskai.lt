@@ -129,7 +129,7 @@ async function airtableFetch(
 // ─── Public API ───────────────────────────────────────────────────────────────
 
 export async function getRecord(tableId: string, recordId: string): Promise<AirtableRecord> {
-  return airtableFetch(`/${tableId}/${recordId}`);
+  return airtableFetch(`/${tableId}/${recordId}?returnFieldsByFieldId=true`);
 }
 
 export async function updateRecord(
@@ -148,7 +148,7 @@ export async function findRecords(
   filterFormula: string,
   maxRecords = 10,
 ): Promise<AirtableListResponse> {
-  const params = new URLSearchParams({ filterByFormula: filterFormula, maxRecords: String(maxRecords) });
+  const params = new URLSearchParams({ filterByFormula: filterFormula, maxRecords: String(maxRecords), returnFieldsByFieldId: 'true' });
   return airtableFetch(`/${tableId}?${params}`);
 }
 
