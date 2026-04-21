@@ -23,14 +23,14 @@ async function airtableGet(path: string) {
   return res.json();
 }
 
-async function airtablePost(table: string, fields: Record<string, unknown>) {
+async function airtablePost(table: string, fields: Record<string, unknown>, typecast = false) {
   const res = await fetch(`https://api.airtable.com/v0/${BASE_ID}/${table}`, {
     method: 'POST',
     headers: {
       Authorization: `Bearer ${AIRTABLE_API_KEY}`,
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ fields }),
+    body: JSON.stringify({ fields, typecast }),
   });
   return res.json();
 }
@@ -79,11 +79,11 @@ export async function POST(req: NextRequest) {
       Response_SLA_Due: slaDue,
       Last_Idempotency_Key: idempotencyKey,
       Last_Event_Processed: 'INTAKE_v1',
-    });
+    }, true);  // typecast: true
 
     if (record.error) {
-      console.error('[intake] Airtable error:', record.error);
-      return NextResponse.json({ error: 'Failed to create request' }, { status: 500 });
+      console.error('[intake] Airtable full error:', JSON.stringify(record));
+      return NextResponse.json({ error: 'Failed to create request', detail: record.error }, { status: 500 });
     }
 
     // Write AUTOMATION_LOGS (best-effort)
