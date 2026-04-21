@@ -1,31 +1,57 @@
 'use client';
-
 import { useState } from 'react';
 
 export default function Home() {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    company: '',
-    expertise: '',
-  });
-  const [formState, setFormState] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  // Provider signup state (unchanged)
+  const [formData, setFormData] = useState({ name: '', email: '', company: '', expertise: '' });
+  const [providerSuccess, setProviderSuccess] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    setFormState('loading');
+    const res = await fetch('/api/provider-signup', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(formData),
+    });
+    if (res.ok) setProviderSuccess(true);
+  }
+
+  // Intake flow state
+  const [intakeStep, setIntakeStep] = useState<'idle' | 'email' | 'success'>('idle');
+  const [problem, setProblem] = useState('');
+  const [intakeEmail, setIntakeEmail] = useState('');
+  const [intakeLoading, setIntakeLoading] = useState(false);
+  const [intakeError, setIntakeError] = useState('');
+
+  async function handleIntakeSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    if (problem.trim().length < 20) {
+      setIntakeError('Aprašyk problemą detaliau — bent 20 simbolių.');
+      return;
+    }
+    setIntakeStep('email');
+    setIntakeError('');
+  }
+
+  async function handleEmailSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setIntakeLoading(true);
+    setIntakeError('');
     try {
-      const res = await fetch('/api/provider-signup', {
+      const res = await fetch('/api/intake', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({ problem, email: intakeEmail }),
       });
-      if (!res.ok) throw new Error();
-      setFormState('success');
-    } catch {
-      setFormState('error');
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Klaida');
+      setIntakeStep('success');
+    } catch (err: unknown) {
+      setIntakeError(err instanceof Error ? err.message : 'Nepavyko. Bandyk dar kartą.');
+    } finally {
+      setIntakeLoading(false);
     }
-  };
+  }
 
   return (
     <main className="bg-[#090909] text-white min-h-screen font-sans antialiased">
@@ -46,48 +72,91 @@ export default function Home() {
       </nav>
 
       {/* HERO */}
-      <section className="min-h-screen flex flex-col justify-center px-6 pt-24 pb-16 max-w-6xl mx-auto">
-        <div className="max-w-3xl">
-          <div className="inline-flex items-center gap-2 border border-[#22c55e]/20 bg-[#22c55e]/5 px-3 py-1 mb-8">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#22c55e] animate-pulse" />
-            <span className="font-mono text-xs text-[#22c55e] tracking-widest uppercase">
-              Beta · Lietuva
-            </span>
-          </div>
-
-          <h1 className="text-5xl md:text-7xl font-black leading-[0.95] tracking-tight mb-8">
-            Aprašyk problemą.
-            <br />
-            <span className="text-[#22c55e]">AI suranda</span>
-            <br />
-            sprendimą.
+      <section className="min-h-screen flex flex-col justify-center px-6 pt-24 pb-16">
+        <div className="max-w-2xl mx-auto w-full">
+          <span className="inline-block text-xs font-semibold tracking-widest text-green-400 uppercase mb-6">
+            Beta · Lietuva
+          </span>
+          <h1 className="text-5xl md:text-6xl font-black text-white leading-tight mb-6">
+            Aprašyk problemą.<br />
+            <span className="text-green-400">AI suranda sprendimą.</span>
           </h1>
-
-          <p className="text-lg md:text-xl text-white/50 leading-relaxed max-w-xl mb-12">
-            RaskAI jungia verslo problemas su verified AI tiekėjais.
-            Be skelbimų. Be laiko švaistymo. Be nežinomybės dėl kainos.
+          <p className="text-gray-400 text-lg mb-10 max-w-xl">
+            RaskAI jungia verslo problemas su verified AI tiekėjais. Be skelbimų. Be laiko švaistytmo.
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-4">
-            <a
-              href="mailto:info@raskai.lt?subject=Turiu AI problemą"
-              className="group flex items-center justify-center gap-3 bg-[#22c55e] text-black font-bold px-8 py-4 text-sm hover:bg-[#16a34a] transition-all duration-200"
-            >
-              Turiu verslo problemą
-              <span className="group-hover:translate-x-1 transition-transform duration-200">→</span>
-            </a>
-            <a
-              href="#provider"
-              className="flex items-center justify-center gap-3 border border-white/15 text-white/70 hover:border-white/40 hover:text-white font-medium px-8 py-4 text-sm transition-all duration-200"
-            >
-              Esu AI tiekėjas
-            </a>
-          </div>
-        </div>
+          {/* INTAKE FLOW */}
+          {intakeStep === 'idle' && (
+            <form onSubmit={handleIntakeSubmit} className="flex flex-col gap-4">
+              <textarea
+                value={problem}
+                onChange={e => setProblem(e.target.value)}
+                placeholder="Pvz.: Turiu e-parduotuvę, noriu automatiškai generuoti produktų aprašymus ir kelti į socialinių tinklų platformas..."
+                rows={5}
+                className="w-full bg-gray-900 border border-gray-700 rounded-xl p-4 text-white placeholder-gray-500 resize-none focus:outline-none focus:border-green-400 text-base"
+              />
+              {intakeError && <p className="text-red-400 text-sm">{intakeError}</p>}
+              <button
+                type="submit"
+                className="self-start bg-green-400 text-black font-bold px-8 py-4 rounded-xl hover:bg-green-300 transition-colors text-base"
+              >
+                Rasti sprendimą →
+              </button>
+            </form>
+          )}
 
-        {/* scroll indicator */}
-        <div className="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-30">
-          <div className="w-px h-12 bg-gradient-to-b from-transparent to-white" />
+          {intakeStep === 'email' && (
+            <form onSubmit={handleEmailSubmit} className="flex flex-col gap-4 max-w-md">
+              <p className="text-gray-300 text-sm">
+                Puiku. Įvesk el. paštą — atsiųsime analizės rezultatą ir surastus tiekėjus.
+              </p>
+              <input
+                type="email"
+                required
+                value={intakeEmail}
+                onChange={e => setIntakeEmail(e.target.value)}
+                placeholder="tavo@email.lt"
+                className="w-full bg-gray-900 border border-gray-700 rounded-xl p-4 text-white placeholder-gray-500 focus:outline-none focus:border-green-400 text-base"
+              />
+              {intakeError && <p className="text-red-400 text-sm">{intakeError}</p>}
+              <div className="flex gap-3">
+                <button
+                  type="button"
+                  onClick={() => setIntakeStep('idle')}
+                  className="px-6 py-3 rounded-xl border border-gray-700 text-gray-400 hover:text-white transition-colors text-sm"
+                >
+                  ← Atgal
+                </button>
+                <button
+                  type="submit"
+                  disabled={intakeLoading}
+                  className="bg-green-400 text-black font-bold px-8 py-3 rounded-xl hover:bg-green-300 transition-colors text-base disabled:opacity-50"
+                >
+                  {intakeLoading ? 'Siunčiama...' : 'Pateikti užklausą'}
+                </button>
+              </div>
+            </form>
+          )}
+
+          {intakeStep === 'success' && (
+            <div className="bg-gray-900 border border-green-400/30 rounded-2xl p-8 max-w-md">
+              <div className="text-green-400 text-3xl mb-4">✓</div>
+              <h2 className="text-white font-bold text-xl mb-2">Užklausa gauta</h2>
+              <p className="text-gray-400 text-sm">
+                AI dispatcher jau analizuoja tavo problemą. Per 24h gausite el. laišką su analizės rezultatais ir surastais tiekėjais.
+              </p>
+            </div>
+          )}
+
+          {/* Provider CTA */}
+          {intakeStep !== 'success' && (
+            <p className="mt-8 text-gray-600 text-sm">
+              Esi AI tiekėjas?{' '}
+              <a href="#provider" className="text-gray-400 hover:text-white underline transition-colors">
+                Registruokis čia →
+              </a>
+            </p>
+          )}
         </div>
       </section>
 
@@ -204,7 +273,7 @@ export default function Home() {
 
           {/* FORMA */}
           <div className="border border-white/8 bg-[#0f0f0f] p-8">
-            {formState === 'success' ? (
+            {providerSuccess ? (
               <div className="text-center py-8">
                 <div className="w-12 h-12 border border-[#22c55e] flex items-center justify-center mx-auto mb-4">
                   <span className="text-[#22c55e] text-xl">✓</span>
@@ -277,13 +346,12 @@ export default function Home() {
 
                   <button
                     type="submit"
-                    disabled={formState === 'loading'}
-                    className="w-full bg-[#22c55e] text-black font-bold py-4 text-sm hover:bg-[#16a34a] transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full bg-[#22c55e] text-black font-bold py-4 text-sm hover:bg-[#16a34a] transition-colors duration-200"
                   >
-                    {formState === 'loading' ? 'Siunčiama...' : 'Registruotis kaip tiekėjas →'}
+                    Registruotis kaip tiekėjas →
                   </button>
 
-                  {formState === 'error' && (
+                  {false && (
                     <p className="text-red-400 text-xs text-center">Klaida. Bandyk dar kartą arba rašyk info@raskai.lt</p>
                   )}
                 </form>
