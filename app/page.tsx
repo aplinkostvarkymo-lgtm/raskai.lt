@@ -1,5 +1,6 @@
 'use client';
 import { useState } from 'react';
+import { ChevronRight } from 'lucide-react';
 import ParticlesBg from '@/components/ui/particles-bg';
 
 export default function Home() {
@@ -204,7 +205,7 @@ export default function Home() {
  <p className="text-xs text-white/30 tracking-widest uppercase mb-4">Procesas</p>
  <h2 className="font-extrabold text-3xl md:text-4xl mb-16">Kaip veikia RaskAI</h2>
 
- <div className="grid md:grid-cols-5 gap-8">
+ <div className="flex flex-col md:flex-row md:items-start gap-0">
  {[
  {
  step: '1',
@@ -236,8 +237,9 @@ export default function Home() {
  title: 'Gaunate veikiančią AI sistemą',
  body: 'Sumokėjęs gaunate būtent Jums suprojektuotą ir veikiančią AI sistemą. Ne konceptą — realų, veikiantį sprendimą.',
  },
- ].map((item) => (
- <div key={item.step} className="relative">
+ ].map((item, index, arr) => (
+ <div key={item.step} className="flex flex-col md:flex-row md:items-start flex-1 min-w-0">
+ <div className="flex-1 min-w-0 mb-8 md:mb-0">
  <div className="w-14 h-14 border border-[#F9731640] flex items-center justify-center mb-6">
  <span className="text-xl font-black text-[#F97316]">{item.step}</span>
  </div>
@@ -246,6 +248,12 @@ export default function Home() {
  </div>
  <h3 className="font-bold text-base mb-3">{item.title}</h3>
  <p className="text-[#8A8A98] text-sm leading-relaxed">{item.body}</p>
+ </div>
+ {index < arr.length - 1 && (
+ <div className="hidden md:flex items-start justify-center pt-6 px-2 flex-shrink-0">
+ <ChevronRight size={24} className="text-[#F97316]/60 animate-pulse" />
+ </div>
+ )}
  </div>
  ))}
  </div>
