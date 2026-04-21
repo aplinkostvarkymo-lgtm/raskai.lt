@@ -1,5 +1,105 @@
 # RaskAI.lt — Claude Code Project Instructions
 
+---
+
+## DESIGN SYSTEM
+
+**Aesthetic:** Dark, technical, purposeful. Three words: Precise. Decisive. Trusted.
+Orange = decisive action only. Never decoration.
+
+### Colors
+| Token | Hex | Usage |
+|---|---|---|
+| bg | `#09090B` | Page background |
+| surface-1 | `#111116` | Cards, panels |
+| surface-2 | `#18181F` | Elevated, modals |
+| surface-3 | `#222229` | Hover, selected |
+| border | `#27272F` | Default borders |
+| border-subtle | `#1C1C23` | Dividers |
+| text-primary | `#F1F0EE` | Headings, body |
+| text-secondary | `#8A8A98` | Labels, descriptions |
+| text-tertiary | `#55555F` | Placeholders, disabled |
+| **accent** | `#F97316` | Primary CTA, active — use sparingly |
+| accent-hover | `#EA6A08` | Hover on accent |
+| accent-subtle | `#F973161A` | Accent bg (10% alpha) |
+| accent-border | `#F9731640` | Accent borders (25% alpha) |
+| success | `#22C55E` | Matched, confirmed |
+| warning | `#EAB308` | Pending, review |
+| error | `#EF4444` | Failed, rejected |
+
+### Typography
+| Role | Font | Weight |
+|---|---|---|
+| Display/Headings | `Syne` | 600–800 |
+| Body/UI | `DM Sans` | 400–500 |
+| Mono/Technical | `JetBrains Mono` | 400 |
+
+| Scale | Size | Line-height | Usage |
+|---|---|---|---|
+| hero | 64px | 1.05 | Hero headline |
+| h1 | 40px | 1.1 | Page titles |
+| h2 | 28px | 1.2 | Section headers |
+| h3 | 20px | 1.3 | Card titles |
+| body | 16px | 1.6 | Body copy |
+| sm | 14px | 1.5 | Labels, captions |
+| xs | 12px | 1.4 | Badges, timestamps |
+| mono | 13px | 1.5 | Code, IDs, status |
+
+### Spacing & Radius
+Base unit: 4px. Scale: `4 8 12 16 20 24 32 40 48 64 80 96px`
+
+| Radius | Value | Usage |
+|---|---|---|
+| sm | 6px | Badges, tags |
+| md | 10px | Buttons, inputs |
+| lg | 16px | Cards |
+| xl | 24px | Modals, large panels |
+
+### Component Rules
+
+**Buttons — 3 variants only:**
+- **Primary:** bg `#F97316`, text `#09090B`, hover scale 1.01 + `box-shadow: 0 0 16px #F9731630`
+- **Secondary:** bg `#18181F`, border `#27272F`, text `#F1F0EE`, hover bg `#222229`
+- **Destructive:** bg `#EF44440D`, border `#EF444440`, text `#EF4444`
+- All: `height 40px`, `padding 0 16px`, `border-radius 10px`, DM Sans 500 14px
+
+**Cards:** `bg #111116`, `border 1px solid #27272F`, `border-radius 16px`, `padding 24px`
+Hover: border → `#3A3A45`, `box-shadow: 0 0 0 1px #3A3A45`
+
+**Inputs:** `bg #09090B`, `border 1px solid #27272F`, `border-radius 10px`, `padding 12px 14px`
+Focus: border `#F9731640`, outline `2px solid #F973161A`. Placeholder: `#55555F`
+
+**Badges:** DM Sans 500 12px, `padding 3px 8px`, `border-radius 99px`. Semantic color 10% alpha bg.
+
+**Nav:** `height 60px`, `bg #09090B`, `border-bottom 1px solid #1C1C23`
+Logo left, nav center (max 5), CTA right. Active item: `#F97316` underline 2px.
+
+**Logo (until official):** Syne 700 `#F1F0EE`, prefix `■` `#F97316` — e.g. `■ RaskAI`
+
+### Motion
+```
+ease-default:  cubic-bezier(0.16, 1, 0.3, 1)    /* snappy settle */
+ease-smooth:   cubic-bezier(0.4, 0, 0.2, 1)      /* smooth */
+ease-spring:   cubic-bezier(0.34, 1.56, 0.64, 1) /* CTA hover */
+duration-fast: 120ms | duration-default: 200ms | duration-slow: 350ms
+```
+- Section reveal: fade-up `opacity 0→1`, `translateY 12px→0`, 350ms, stagger 60ms
+- Card hover: border brightens 120ms, `translateY(-2px)` 200ms — never scale
+- Loading: skeleton shimmer `#FFFFFF08→#FFFFFF12` — no spinners
+- Spline (hero only): fades in after 600ms, disabled on mobile
+
+### Icons & Imagery
+- `lucide-react` only. Size 16px UI / 20px feature. Stroke 1.5px. Never filled.
+- No stock illustrations, photography, human faces, or generic "AI brain" imagery.
+
+### Copy Rules
+- Sentence case everywhere. ALL CAPS only for badges (max 3 words).
+- No AI clichés: never "powerful", "seamless", "cutting-edge", "revolutionize"
+- CTAs use verbs: "Submit brief", "Get matched" — not "Learn more"
+- Status messages human: "Matching providers..." not "Processing request..."
+
+---
+
 ## KAS YRA ŠIS PROJEKTAS
 
 RaskAI.lt yra AI-powered B2B marketplace Lietuvoje. Klientai aprašo verslo problemą natūralia kalba. AI Dispatcher klasifikuoja užklausą, generuoja struktūrizuotą Spec'ą, įvertina kainą ir sutapatina su verified tiekėjais. Tiekėjai pateikia kainas. Klientas gauna shortlist'ą. Sandoris uždaromas per Stripe.

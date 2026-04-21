@@ -1,16 +1,17 @@
 import type { Metadata } from "next";
-import { Playfair_Display, IBM_Plex_Sans, JetBrains_Mono } from "next/font/google";
+import { Syne, DM_Sans, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 
-const playfair = Playfair_Display({
+const syne = Syne({
   subsets: ["latin"],
+  weight: ["600", "700", "800"],
   variable: "--font-display",
   display: "swap",
 });
 
-const ibmPlex = IBM_Plex_Sans({
+const dmSans = DM_Sans({
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600"],
+  weight: ["400", "500"],
   variable: "--font-body",
   display: "swap",
 });
@@ -36,7 +37,7 @@ export default function RootLayout({
   return (
     <html lang="lt">
       <body
-        className={`${playfair.variable} ${ibmPlex.variable} ${jetbrains.variable} antialiased font-body`}
+        className={`${syne.variable} ${dmSans.variable} ${jetbrains.variable} antialiased font-body`}
       >
         {children}
       </body>
