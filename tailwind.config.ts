@@ -13,9 +13,7 @@ const config: Config = {
         foreground: "var(--foreground)",
       },
       fontFamily: {
-        display: ["var(--font-display)", "Georgia", "serif"],
-        body: ["var(--font-body)", "system-ui", "sans-serif"],
-        mono: ["var(--font-mono)", "Consolas", "monospace"],
+        sans: ["var(--font-inter)", "system-ui", "sans-serif"],
       },
       keyframes: {
         slideUp: {
