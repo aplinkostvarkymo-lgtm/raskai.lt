@@ -88,7 +88,6 @@ export async function POST(req: NextRequest) {
       Email: email.trim().toLowerCase(),
       Name: name?.trim() || '',
       Problem_Raw: problem.trim(),
-      Source_Channel: 'web_form',
       State: 'DRAFT',
       Last_Idempotency_Key: idempotencyKey,
     });
