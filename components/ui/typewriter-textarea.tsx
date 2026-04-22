@@ -51,11 +51,11 @@ export default function TypewriterTextarea({ value, onChange, onShowExamples }: 
   return (
     <>
       <div className="flex items-center justify-between">
-        <span className="text-xs text-[#55555F]">Aprašyk problemą laisva forma</span>
+        <span className="text-xs text-zinc-300">Aprašyk problemą laisva forma</span>
         <button
           type="button"
           onClick={onShowExamples}
-          className="flex items-center gap-1.5 text-xs text-[#F97316]/70 hover:text-[#F97316] border border-[#F9731630] hover:border-[#F9731660] bg-[#F973160A] hover:bg-[#F973161A] px-3 py-1.5 rounded-[8px] transition-colors"
+          className="flex items-center gap-1.5 text-sm font-semibold text-[#09090B] bg-[#F97316] hover:bg-[#EA6A08] px-5 py-2.5 rounded-[10px] transition-colors duration-200"
         >
           <span>✦</span> Gerų užklausų pavyzdžiai
         </button>
