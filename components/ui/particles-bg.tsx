@@ -43,10 +43,10 @@ export default function ParticlesBg() {
           },
         },
         interactivity: {
+          detectsOn: 'window',
           events: {
             onHover: { enable: true, mode: 'grab' },
             onClick: { enable: true, mode: 'push' },
-            resize: { enable: true },
           },
           modes: {
             grab: { distance: 200, links: { opacity: 0.5 } },
