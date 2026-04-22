@@ -1,7 +1,8 @@
 'use client';
-import { useState, useEffect, useRef } from 'react';
+import { useState } from 'react';
 import { ChevronRight } from 'lucide-react';
-import ParticlesCanvas from '@/components/ui/particles-canvas';
+import ParticlesBg from '@/components/ui/particles-bg';
+import TypewriterTextarea from '@/components/ui/typewriter-textarea';
 import { tier1Options, getTier2ForTier1 } from '@/lib/tiers';
 import QueryExamplesModal from '@/components/ui/query-examples-modal';
 
@@ -25,44 +26,6 @@ export default function Home() {
  const [intakeEmail, setIntakeEmail] = useState('');
  const [intakeLoading, setIntakeLoading] = useState(false);
  const [intakeError, setIntakeError] = useState('');
-
- const TYPEWRITER_PROMPTS = [
- 'Turiu internetinę parduotuvę, noriu automatizuoti klientų aptarnavimą su AI...',
- 'Reikia AI sistemos kuri apdorotų gaunamą korespondenciją ir atsakytų automatiškai...',
- "Noriu sukurti pardavimų AI agentą kuris kvalifikuotų lead'us prieš perduodant vadybininkui...",
- 'Mūsų komanda praleidžia 3h/dieną rašydama ataskaitas — noriu tai automatizuoti...',
- ];
- const [typedText, setTypedText] = useState('');
- const [isFading, setIsFading] = useState(false);
- const typewriterTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-
- useEffect(() => {
- let promptIdx = 0;
- let charIdx = 0;
-
- function tick() {
- const prompt = TYPEWRITER_PROMPTS[promptIdx];
- charIdx++;
- setTypedText(prompt.slice(0, charIdx));
- if (charIdx < prompt.length) {
- typewriterTimer.current = setTimeout(tick, 40);
- } else {
- typewriterTimer.current = setTimeout(() => {
- setIsFading(true);
- typewriterTimer.current = setTimeout(() => {
- promptIdx = (promptIdx + 1) % TYPEWRITER_PROMPTS.length;
- charIdx = 0;
- setTypedText('');
- setIsFading(false);
- typewriterTimer.current = setTimeout(tick, 300);
- }, 400);
- }, 2500);
- }
- }
-
- typewriterTimer.current = setTimeout(tick, 900);
- return () => { if (typewriterTimer.current) clearTimeout(typewriterTimer.current); };
- }, []);
 
  async function handleIntakeSubmit(e: React.FormEvent) {
  e.preventDefault();
@@ -118,7 +81,7 @@ export default function Home() {
 
  {/* HERO */}
  <section className="relative min-h-screen flex flex-col justify-center px-6 pt-24 pb-16 overflow-hidden">
- <ParticlesCanvas />
+ <ParticlesBg />
  <div className="relative z-10 max-w-4xl mx-auto w-full">
  <span className="inline-block text-xs font-medium tracking-widest text-[#F97316] uppercase mb-6 border border-[#F9731640] bg-[#F973161A] px-3 py-1 rounded-[6px]">
  Beta · Lietuva
@@ -133,32 +96,11 @@ export default function Home() {
 
  {intakeStep === 'idle' && (
  <form onSubmit={handleIntakeSubmit} className="flex flex-col gap-4 max-w-2xl">
- <div className="flex items-center justify-between mb-0">
- <span className="text-xs text-[#55555F]">Aprašyk problemą laisva forma</span>
- <button
- type="button"
- onClick={() => setShowExamples(true)}
- className="flex items-center gap-1.5 text-xs text-[#F97316]/70 hover:text-[#F97316] border border-[#F9731630] hover:border-[#F9731660] bg-[#F973160A] hover:bg-[#F973161A] px-3 py-1.5 rounded-[8px] transition-colors"
- >
- <span>✦</span> Gerų užklausų pavyzdžiai
- </button>
- </div>
- <div className="relative" style={{ isolation: 'isolate' }}>
- <textarea
+ <TypewriterTextarea
  value={problem}
- onChange={e => setProblem(e.target.value)}
- rows={5}
- className="w-full bg-[#09090B] border border-[#27272F] rounded-[10px] p-4 text-[#F1F0EE] resize-none focus:outline-none focus:border-[#F9731640] focus:ring-2 focus:ring-[#F973161A] text-base transition-colors duration-120"
+ onChange={setProblem}
+ onShowExamples={() => setShowExamples(true)}
  />
- {!problem && (
- <div
- aria-hidden="true"
- className={`absolute top-0 left-0 right-0 p-4 text-base text-[#55555F] pointer-events-none leading-relaxed transition-opacity duration-[400ms] ${isFading ? 'opacity-0' : 'opacity-100'}`}
- >
- {typedText}<span className="opacity-50 animate-pulse">|</span>
- </div>
- )}
- </div>
  {intakeError && <p className="text-[#EF4444] text-sm">{intakeError}</p>}
  <button
  type="submit"
