@@ -25,10 +25,11 @@ const OPTIONS = {
     detectsOn: 'window' as const,
     events: {
       onHover: { enable: true, mode: 'grab' as const },
-      onClick: { enable: false },
+      onClick: { enable: true, mode: 'push' as const },
     },
     modes: {
       grab: { distance: 140, links: { opacity: 0.3 } },
+      push: { quantity: 3 },
     },
   },
   detectRetina: true,
