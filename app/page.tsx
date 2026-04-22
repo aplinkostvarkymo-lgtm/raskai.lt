@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { ChevronRight } from 'lucide-react';
 import ParticlesBg from '@/components/ui/particles-bg';
 import { tier1Options, getTier2ForTier1 } from '@/lib/tiers';
@@ -25,6 +25,44 @@ export default function Home() {
  const [intakeEmail, setIntakeEmail] = useState('');
  const [intakeLoading, setIntakeLoading] = useState(false);
  const [intakeError, setIntakeError] = useState('');
+
+ const TYPEWRITER_PROMPTS = [
+ 'Turiu internetinę parduotuvę, noriu automatizuoti klientų aptarnavimą su AI...',
+ 'Reikia AI sistemos kuri apdorotų gaunamą korespondenciją ir atsakytų automatiškai...',
+ "Noriu sukurti pardavimų AI agentą kuris kvalifikuotų lead'us prieš perduodant vadybininkui...",
+ 'Mūsų komanda praleidžia 3h/dieną rašydama ataskaitas — noriu tai automatizuoti...',
+ ];
+ const [typedText, setTypedText] = useState('');
+ const [isFading, setIsFading] = useState(false);
+ const typewriterTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+ useEffect(() => {
+ let promptIdx = 0;
+ let charIdx = 0;
+
+ function tick() {
+ const prompt = TYPEWRITER_PROMPTS[promptIdx];
+ charIdx++;
+ setTypedText(prompt.slice(0, charIdx));
+ if (charIdx < prompt.length) {
+ typewriterTimer.current = setTimeout(tick, 40);
+ } else {
+ typewriterTimer.current = setTimeout(() => {
+ setIsFading(true);
+ typewriterTimer.current = setTimeout(() => {
+ promptIdx = (promptIdx + 1) % TYPEWRITER_PROMPTS.length;
+ charIdx = 0;
+ setTypedText('');
+ setIsFading(false);
+ typewriterTimer.current = setTimeout(tick, 300);
+ }, 400);
+ }, 2500);
+ }
+ }
+
+ typewriterTimer.current = setTimeout(tick, 900);
+ return () => { if (typewriterTimer.current) clearTimeout(typewriterTimer.current); };
+ }, []);
 
  async function handleIntakeSubmit(e: React.FormEvent) {
  e.preventDefault();
@@ -89,7 +127,7 @@ export default function Home() {
  Aprašyk problemą.<br />
  <span className="text-[#F97316]">AI suranda sprendimą.</span>
  </h1>
- <p className="text-[#8A8A98] text-lg mb-10 max-w-2xl leading-relaxed">
+ <p className="text-zinc-200 text-lg mb-10 max-w-2xl leading-relaxed">
  RaskAI sujungia verslo problemas su atrinktais AI Kūrėjais. Be laiko švaistymo. Jūsų problema + atrinkti AI kūrėjai = sprendimas būtent jums.
  </p>
 
@@ -105,13 +143,22 @@ export default function Home() {
  <span>✦</span> Gerų užklausų pavyzdžiai
  </button>
  </div>
+ <div className="relative">
  <textarea
  value={problem}
  onChange={e => setProblem(e.target.value)}
- placeholder="Pvz.: Turiu e-parduotuvę, noriu automatiškai generuoti produktų aprašymus ir kelti į socialinių tinklų platformas..."
  rows={5}
- className="w-full bg-[#09090B] border border-[#27272F] rounded-[10px] p-4 text-[#F1F0EE] placeholder-[#55555F] resize-none focus:outline-none focus:border-[#F9731640] focus:ring-2 focus:ring-[#F973161A] text-base transition-colors duration-120"
+ className="w-full bg-[#09090B] border border-[#27272F] rounded-[10px] p-4 text-[#F1F0EE] resize-none focus:outline-none focus:border-[#F9731640] focus:ring-2 focus:ring-[#F973161A] text-base transition-colors duration-120"
  />
+ {!problem && (
+ <div
+ aria-hidden="true"
+ className={`absolute top-0 left-0 right-0 p-4 text-base text-[#55555F] pointer-events-none leading-relaxed transition-opacity duration-[400ms] ${isFading ? 'opacity-0' : 'opacity-100'}`}
+ >
+ {typedText}<span className="opacity-50 animate-pulse">|</span>
+ </div>
+ )}
+ </div>
  {intakeError && <p className="text-[#EF4444] text-sm">{intakeError}</p>}
  <button
  type="submit"
@@ -127,7 +174,7 @@ export default function Home() {
 
  {intakeStep === 'email' && (
  <form onSubmit={handleEmailSubmit} className="flex flex-col gap-4 max-w-md">
- <p className="text-[#8A8A98] text-sm">
+ <p className="text-zinc-200 text-sm">
  Puiku. Įvesk el. paštą — atsiųsime analizės rezultatą ir surastus tiekėjus.
  </p>
  <input
@@ -143,7 +190,7 @@ export default function Home() {
  <button
  type="button"
  onClick={() => setIntakeStep('idle')}
- className="px-6 py-2 h-10 rounded-[10px] border border-[#27272F] bg-[#18181F] text-[#8A8A98] hover:bg-[#222229] hover:text-[#F1F0EE] transition-all duration-120 text-sm"
+ className="px-6 py-2 h-10 rounded-[10px] border border-[#27272F] bg-[#18181F] text-zinc-200 hover:bg-[#222229] hover:text-[#F1F0EE] transition-all duration-120 text-sm"
  >
  ← Atgal
  </button>
@@ -163,7 +210,7 @@ export default function Home() {
  <div className="bg-[#111116] border border-[#27272F] rounded-2xl p-8 max-w-md">
  <div className="text-[#F97316] text-3xl mb-4">✓</div>
  <h2 className="text-[#F1F0EE] font-bold text-xl mb-2">Užklausa gauta</h2>
- <p className="text-[#8A8A98] text-sm leading-relaxed">
+ <p className="text-zinc-200 text-sm leading-relaxed">
  AI dispatcher jau analizuoja tavo problemą. Per 24h gausite el. laišką su analizės rezultatais ir surastais tiekėjais.
  </p>
  </div>
@@ -172,7 +219,7 @@ export default function Home() {
  {intakeStep !== 'success' && (
  <p className="mt-8 text-[#55555F] text-sm">
  Esi AI tiekėjas?{' '}
- <a href="#provider"className="text-[#8A8A98] hover:text-[#F1F0EE] underline transition-colors duration-120">
+ <a href="#provider"className="text-zinc-200 hover:text-[#F1F0EE] underline transition-colors duration-120">
  Registruokis čia →
  </a>
  </p>
@@ -207,7 +254,7 @@ export default function Home() {
  <div key={item.num} className="bg-[#111116] p-8 md:p-10">
  <span className="text-xs text-[#55555F] mb-6 block">{item.num}</span>
  <h3 className="font-bold text-lg mb-3">{item.title}</h3>
- <p className="text-[#8A8A98] text-sm leading-relaxed">{item.body}</p>
+ <p className="text-zinc-200 text-sm leading-relaxed">{item.body}</p>
  </div>
  ))}
  </div>
@@ -261,7 +308,7 @@ export default function Home() {
  <span className="text-[10px] text-[#F97316]/50 tracking-widest uppercase">{item.tag}</span>
  </div>
  <h3 className="font-bold text-base mb-3">{item.title}</h3>
- <p className="text-[#8A8A98] text-sm leading-relaxed">{item.body}</p>
+ <p className="text-zinc-200 text-sm leading-relaxed">{item.body}</p>
  </div>
  {index < arr.length - 1 && (
  <div className="hidden md:flex items-start justify-center pt-6 px-2 flex-shrink-0">
@@ -283,7 +330,7 @@ export default function Home() {
  Tu kuri AI sprendimus ir sistemas?<br />
  Mes atvedame klientus.
  </h2>
- <p className="text-[#8A8A98] mb-10 leading-relaxed">
+ <p className="text-zinc-200 mb-10 leading-relaxed">
  Dauguma gerų AI specialistų praleidžia 30–40% laiko ieškodami klientų.
  RaskAI pašalina šį kaštą — tu gauni tik jau suinteresuotus lead'us.
  </p>
@@ -297,28 +344,28 @@ export default function Home() {
  ].map((item) => (
  <div key={item} className="flex items-start gap-3">
  <span className="text-[#F97316] mt-0.5 text-lg leading-none">✓</span>
- <span className="text-[#8A8A98] text-sm leading-relaxed">{item}</span>
+ <span className="text-zinc-200 text-sm leading-relaxed">{item}</span>
  </div>
  ))}
  </div>
  </div>
 
  {/* FORMA */}
- <div className="border border-[#27272F] bg-[#111116] rounded-[16px] p-8">
+ <div className="border border-[#F97316]/30 bg-zinc-900/80 rounded-[16px] p-8 shadow-[0_0_40px_rgba(249,115,22,0.15)]">
  {providerSuccess ? (
  <div className="text-center py-8">
  <div className="w-12 h-12 border border-[#F97316] flex items-center justify-center mx-auto mb-4 rounded-[10px]">
  <span className="text-[#F97316] text-xl">✓</span>
  </div>
  <h3 className="font-bold text-lg mb-2">Registracija gauta</h3>
- <p className="text-[#8A8A98] text-sm">
+ <p className="text-zinc-200 text-sm">
  Susisieksime per 24–48 val. ir aptarsime verified tiekėjo onboardingą.
  </p>
  </div>
  ) : (
  <>
  <h3 className="font-bold text-lg mb-1">Tapk verified tiekėju</h3>
- <p className="text-[#55555F] text-sm mb-6">Pirmieji 10 tiekėjų — nemokamas Verified-2 statusas</p>
+ <p className="text-zinc-400 text-sm mb-6">Pirmieji 10 tiekėjų — nemokamas Verified-2 statusas</p>
 
  <form onSubmit={handleSubmit} className="space-y-4">
  <div>
@@ -328,7 +375,7 @@ export default function Home() {
  required
  value={formData.name}
  onChange={e => setFormData(p => ({ ...p, name: e.target.value }))}
- className="w-full bg-[#09090B] border border-[#27272F] rounded-[10px] px-4 py-3 text-sm text-[#F1F0EE] placeholder-[#55555F] focus:outline-none focus:border-[#F9731640] focus:ring-2 focus:ring-[#F973161A] transition-colors"
+ className="w-full bg-[#09090B] border border-orange-500/40 rounded-[10px] px-4 py-3 text-sm text-[#F1F0EE] placeholder-[#55555F] focus:outline-none focus:border-[#F9731640] focus:ring-2 focus:ring-[#F973161A] transition-colors"
  placeholder="Jonas Jonaitis"
  />
  </div>
@@ -340,7 +387,7 @@ export default function Home() {
  required
  value={formData.email}
  onChange={e => setFormData(p => ({ ...p, email: e.target.value }))}
- className="w-full bg-[#09090B] border border-[#27272F] rounded-[10px] px-4 py-3 text-sm text-[#F1F0EE] placeholder-[#55555F] focus:outline-none focus:border-[#F9731640] focus:ring-2 focus:ring-[#F973161A] transition-colors"
+ className="w-full bg-[#09090B] border border-orange-500/40 rounded-[10px] px-4 py-3 text-sm text-[#F1F0EE] placeholder-[#55555F] focus:outline-none focus:border-[#F9731640] focus:ring-2 focus:ring-[#F973161A] transition-colors"
  placeholder="jonas@kompanija.lt"
  />
  </div>
@@ -351,7 +398,7 @@ export default function Home() {
  type="text"
  value={formData.company}
  onChange={e => setFormData(p => ({ ...p, company: e.target.value }))}
- className="w-full bg-[#09090B] border border-[#27272F] rounded-[10px] px-4 py-3 text-sm text-[#F1F0EE] placeholder-[#55555F] focus:outline-none focus:border-[#F9731640] focus:ring-2 focus:ring-[#F973161A] transition-colors"
+ className="w-full bg-[#09090B] border border-orange-500/40 rounded-[10px] px-4 py-3 text-sm text-[#F1F0EE] placeholder-[#55555F] focus:outline-none focus:border-[#F9731640] focus:ring-2 focus:ring-[#F973161A] transition-colors"
  placeholder="UAB Kompanija arba freelance"
  />
  </div>
@@ -362,7 +409,7 @@ export default function Home() {
  required
  value={formData.tier1}
  onChange={e => setFormData(p => ({ ...p, tier1: e.target.value, tier2Skills: [] }))}
- className="w-full bg-[#09090B] border border-[#27272F] rounded-[10px] px-4 py-3 text-sm text-[#F1F0EE] focus:outline-none focus:border-[#F9731640] focus:ring-2 focus:ring-[#F973161A] transition-colors"
+ className="w-full bg-[#09090B] border border-orange-500/40 rounded-[10px] px-4 py-3 text-sm text-[#F1F0EE] focus:outline-none focus:border-[#F9731640] focus:ring-2 focus:ring-[#F973161A] transition-colors"
  >
  <option value="" disabled>Pasirink sritį...</option>
  {tier1Options.map(t1 => (
@@ -439,7 +486,7 @@ export default function Home() {
  ].map((item) => (
  <div key={item.label} className="bg-[#111116] px-8 py-10">
  <div className="text-3xl font-black text-[#F97316] mb-2">{item.num}</div>
- <p className="text-[#8A8A98] text-sm leading-relaxed">{item.label}</p>
+ <p className="text-zinc-200 text-sm leading-relaxed">{item.label}</p>
  </div>
  ))}
  </div>
