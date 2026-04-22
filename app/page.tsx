@@ -3,9 +3,11 @@ import { useState } from 'react';
 import { ChevronRight } from 'lucide-react';
 import ParticlesBg from '@/components/ui/particles-bg';
 import { tier1Options, getTier2ForTier1 } from '@/lib/tiers';
+import QueryExamplesModal from '@/components/ui/query-examples-modal';
 
 export default function Home() {
  const [formData, setFormData] = useState({ name: '', email: '', company: '', tier1: '', tier2Skills: [] as string[] });
+ const [showExamples, setShowExamples] = useState(false);
  const [providerSuccess, setProviderSuccess] = useState(false);
 
  async function handleSubmit(e: React.FormEvent) {
@@ -55,6 +57,7 @@ export default function Home() {
  }
 
  return (
+ <>
  <main className="bg-[#09090B] text-[#F1F0EE] min-h-screen antialiased">
 
  {/* NAV */}
@@ -92,6 +95,16 @@ export default function Home() {
 
  {intakeStep === 'idle' && (
  <form onSubmit={handleIntakeSubmit} className="flex flex-col gap-4 max-w-2xl">
+ <div className="flex items-center justify-between mb-0">
+ <span className="text-xs text-[#55555F]">Aprašyk problemą laisva forma</span>
+ <button
+ type="button"
+ onClick={() => setShowExamples(true)}
+ className="flex items-center gap-1.5 text-xs text-[#F97316]/70 hover:text-[#F97316] border border-[#F9731630] hover:border-[#F9731660] bg-[#F973160A] hover:bg-[#F973161A] px-3 py-1.5 rounded-[8px] transition-colors"
+ >
+ <span>✦</span> Gerų užklausų pavyzdžiai
+ </button>
+ </div>
  <textarea
  value={problem}
  onChange={e => setProblem(e.target.value)}
@@ -446,5 +459,13 @@ export default function Home() {
  </footer>
 
  </main>
+
+ {showExamples && (
+ <QueryExamplesModal
+ onClose={() => setShowExamples(false)}
+ onUse={text => { setProblem(text); setShowExamples(false); }}
+ />
+ )}
+ </>
  );
 }
