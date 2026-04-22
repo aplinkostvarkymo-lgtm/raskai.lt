@@ -143,7 +143,7 @@ export default function Home() {
  <span>✦</span> Gerų užklausų pavyzdžiai
  </button>
  </div>
- <div className="relative">
+ <div className="relative" style={{ isolation: 'isolate' }}>
  <textarea
  value={problem}
  onChange={e => setProblem(e.target.value)}

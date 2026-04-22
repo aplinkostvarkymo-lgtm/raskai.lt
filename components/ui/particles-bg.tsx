@@ -16,9 +16,18 @@ export default function ParticlesBg() {
   if (!ready) return null;
 
   return (
+    <div
+      style={{
+        position: 'fixed',
+        inset: 0,
+        zIndex: 0,
+        pointerEvents: 'none',
+        willChange: 'transform',
+      }}
+    >
     <Particles
       id="tsparticles"
-      className="absolute inset-0 w-full h-full z-0 pointer-events-none"
+      style={{ width: '100%', height: '100%', position: 'fixed', inset: 0 }}
       options={{
         background: { color: { value: 'transparent' } },
         fpsLimit: 60,
@@ -56,5 +65,6 @@ export default function ParticlesBg() {
         detectRetina: true,
       }}
     />
+    </div>
   );
 }
