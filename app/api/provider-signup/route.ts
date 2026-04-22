@@ -6,9 +6,9 @@ const TABLE_ID = 'PROVIDER_ENTITIES';
 
 export async function POST(req: NextRequest) {
   try {
-    const { name, email, company, expertise } = await req.json();
+    const { name, email, company, tier1, tier2Skills } = await req.json();
 
-    if (!name || !email || !expertise) {
+    if (!name || !email || !tier1) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
@@ -26,6 +26,8 @@ export async function POST(req: NextRequest) {
               Representative_Name: name,
               Representative_Email: email,
               Registration_Status: 'lead',
+              T1_Expertise: tier1,
+              T2_Skills: Array.isArray(tier2Skills) ? tier2Skills.join(', ') : '',
             },
           },
         ],

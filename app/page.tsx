@@ -2,9 +2,10 @@
 import { useState } from 'react';
 import { ChevronRight } from 'lucide-react';
 import ParticlesBg from '@/components/ui/particles-bg';
+import { tier1Options, getTier2ForTier1 } from '@/lib/tiers';
 
 export default function Home() {
- const [formData, setFormData] = useState({ name: '', email: '', company: '', expertise: '' });
+ const [formData, setFormData] = useState({ name: '', email: '', company: '', tier1: '', tier2Skills: [] as string[] });
  const [providerSuccess, setProviderSuccess] = useState(false);
 
  async function handleSubmit(e: React.FormEvent) {
@@ -343,24 +344,62 @@ export default function Home() {
  </div>
 
  <div>
- <label className="text-xs text-[#55555F] tracking-widest uppercase block mb-1.5">Ekspertizė</label>
+ <label className="text-xs text-[#55555F] tracking-widest uppercase block mb-1.5">Ekspertizės sritis</label>
  <select
  required
- value={formData.expertise}
- onChange={e => setFormData(p => ({ ...p, expertise: e.target.value }))}
+ value={formData.tier1}
+ onChange={e => setFormData(p => ({ ...p, tier1: e.target.value, tier2Skills: [] }))}
  className="w-full bg-[#09090B] border border-[#27272F] rounded-[10px] px-4 py-3 text-sm text-[#F1F0EE] focus:outline-none focus:border-[#F9731640] focus:ring-2 focus:ring-[#F973161A] transition-colors"
  >
- <option value=""disabled>Pasirink sritį...</option>
- <option value="BUSINESS_AUTO">Verslo automatizacija</option>
- <option value="CUSTOMER_SUPPORT_AI">AI klientų aptarnavimas</option>
- <option value="ECOMMERCE_AI">E-commerce AI</option>
- <option value="CONTENT_PROD">Turinio generavimas</option>
- <option value="SALES_AI">Pardavimų AI</option>
- <option value="DATA_ANALYTICS">Duomenų analitika</option>
- <option value="WEB_APPS">Web aplikacijos</option>
- <option value="CUSTOM_DEV">Custom AI kūrimas</option>
+ <option value="" disabled>Pasirink sritį...</option>
+ {tier1Options.map(t1 => (
+ <option key={t1.id} value={t1.id}>{t1.label}</option>
+ ))}
  </select>
  </div>
+
+ {formData.tier1 && getTier2ForTier1(formData.tier1).length > 0 && (
+ <div>
+ <label className="text-xs text-[#55555F] tracking-widest uppercase block mb-2">Technologijos / įrankiai</label>
+ <div className="grid grid-cols-1 gap-1.5 max-h-48 overflow-y-auto pr-1">
+ {getTier2ForTier1(formData.tier1).map(t2 => {
+ const checked = formData.tier2Skills.includes(t2.id);
+ return (
+ <label
+ key={t2.id}
+ className={`flex items-center gap-3 px-3 py-2.5 rounded-[8px] border cursor-pointer transition-colors ${
+ checked
+ ? 'border-[#F97316]/50 bg-[#F973160D]'
+ : 'border-[#27272F] bg-[#09090B] hover:border-[#F97316]/30'
+ }`}
+ >
+ <input
+ type="checkbox"
+ checked={checked}
+ onChange={() => setFormData(p => ({
+ ...p,
+ tier2Skills: checked
+ ? p.tier2Skills.filter(s => s !== t2.id)
+ : [...p.tier2Skills, t2.id],
+ }))}
+ className="sr-only"
+ />
+ <span className={`w-4 h-4 flex-shrink-0 rounded-[4px] border flex items-center justify-center transition-colors ${
+ checked ? 'border-[#F97316] bg-[#F97316]' : 'border-[#27272F]'
+ }`}>
+ {checked && (
+ <svg width="10" height="8" viewBox="0 0 10 8" fill="none">
+ <path d="M1 4L3.5 6.5L9 1" stroke="#09090B" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+ </svg>
+ )}
+ </span>
+ <span className="text-sm text-[#F1F0EE]">{t2.label}</span>
+ </label>
+ );
+ })}
+ </div>
+ </div>
+ )}
 
  <button
  type="submit"
