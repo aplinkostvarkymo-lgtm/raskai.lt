@@ -311,7 +311,7 @@ export default function Home() {
 
  <form onSubmit={handleSubmit} className="space-y-4">
  <div>
- <label className="text-xs text-[#55555F] tracking-widest uppercase block mb-1.5">Vardas</label>
+ <label className="text-xs text-zinc-300 tracking-widest uppercase block mb-1.5">Vardas</label>
  <input
  type="text"
  required
@@ -323,7 +323,7 @@ export default function Home() {
  </div>
 
  <div>
- <label className="text-xs text-[#55555F] tracking-widest uppercase block mb-1.5">El. paštas</label>
+ <label className="text-xs text-zinc-300 tracking-widest uppercase block mb-1.5">El. paštas</label>
  <input
  type="email"
  required
@@ -335,7 +335,7 @@ export default function Home() {
  </div>
 
  <div>
- <label className="text-xs text-[#55555F] tracking-widest uppercase block mb-1.5">Kompanija / freelance</label>
+ <label className="text-xs text-zinc-300 tracking-widest uppercase block mb-1.5">Kompanija / freelance</label>
  <input
  type="text"
  value={formData.company}
@@ -346,7 +346,7 @@ export default function Home() {
  </div>
 
  <div>
- <label className="text-xs text-[#55555F] tracking-widest uppercase block mb-1.5">Ekspertizės sritis</label>
+ <label className="text-xs text-zinc-300 tracking-widest uppercase block mb-1.5">Ekspertizės sritis</label>
  <select
  required
  value={formData.tier1}
@@ -362,7 +362,7 @@ export default function Home() {
 
  {formData.tier1 && getTier2ForTier1(formData.tier1).length > 0 && (
  <div>
- <label className="text-xs text-[#55555F] tracking-widest uppercase block mb-2">Technologijos / įrankiai</label>
+ <label className="text-xs text-zinc-300 tracking-widest uppercase block mb-2">Technologijos / įrankiai</label>
  <div className="grid grid-cols-1 gap-1.5 max-h-48 overflow-y-auto pr-1">
  {getTier2ForTier1(formData.tier1).map(t2 => {
  const checked = formData.tier2Skills.includes(t2.id);
