@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect, useRef } from 'react';
 import { ChevronRight } from 'lucide-react';
-import ParticlesBg from '@/components/ui/particles-bg';
+import ParticlesCanvas from '@/components/ui/particles-canvas';
 import { tier1Options, getTier2ForTier1 } from '@/lib/tiers';
 import QueryExamplesModal from '@/components/ui/query-examples-modal';
 
@@ -118,7 +118,7 @@ export default function Home() {
 
  {/* HERO */}
  <section className="relative min-h-screen flex flex-col justify-center px-6 pt-24 pb-16 overflow-hidden">
- <ParticlesBg />
+ <ParticlesCanvas />
  <div className="relative z-10 max-w-4xl mx-auto w-full">
  <span className="inline-block text-xs font-medium tracking-widest text-[#F97316] uppercase mb-6 border border-[#F9731640] bg-[#F973161A] px-3 py-1 rounded-[6px]">
  Beta · Lietuva
