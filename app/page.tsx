@@ -69,7 +69,6 @@ export default function Home() {
  <span className="font-bold tracking-tight text-lg text-[#F1F0EE]">
  <span className="text-[#F97316]">■</span> RaskAI
  </span>
- <span className="hidden sm:inline text-zinc-300 text-xs">· Powered by Robertas + Claude</span>
  </div>
  <a
  href="#provider"
@@ -81,7 +80,7 @@ export default function Home() {
  </nav>
 
  {/* HERO */}
- <section className="relative min-h-screen flex flex-col justify-center px-6 pt-24 pb-16 overflow-hidden">
+ <section className="relative flex flex-col justify-start px-6 pt-[120px] pb-20 overflow-hidden">
  <ParticlesBg />
  <div className="relative z-10 max-w-4xl mx-auto w-full">
  <span className="inline-block text-xs font-medium tracking-widest text-[#F97316] uppercase mb-6 border border-[#F9731640] bg-[#F973161A] px-3 py-1 rounded-[6px]">
@@ -205,7 +204,7 @@ export default function Home() {
  {
  num: '01',
  title: 'Nežinai kur ieškoti',
- body: 'LinkedIn pilnas žmonių kurie"daro AI". Upwork — pilnas siūlymų kurie nieko nesako. Nėra vietos kur gauti patikrintus specialistus.',
+ body: 'LinkedIn pilnas žmonių, kurie „daro AI". Upwork — pilnas siūlymų, kurie nieko nesako. Nėra vietos kur gauti patikrintus specialistus.',
  },
  {
  num: '02',

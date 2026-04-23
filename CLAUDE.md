@@ -30,9 +30,10 @@ Orange = decisive action only. Never decoration.
 ### Typography
 | Role | Font | Weight |
 |---|---|---|
-| Display/Headings | `Syne` | 600–800 |
-| Body/UI | `DM Sans` | 400–500 |
-| Mono/Technical | `JetBrains Mono` | 400 |
+| All text | `Inter` | 400–800 |
+
+Single font: Inter loaded via `next/font/google`, CSS variable `--font-inter`, weights 400/500/600/700/800.
+`tailwind.config.ts` fontFamily.sans = `["var(--font-inter)", "system-ui", "sans-serif"]`
 
 | Scale | Size | Line-height | Usage |
 |---|---|---|---|
@@ -64,7 +65,20 @@ Base unit: 4px. Scale: `4 8 12 16 20 24 32 40 48 64 80 96px`
 - All: `height 40px`, `padding 0 16px`, `border-radius 10px`, DM Sans 500 14px
 
 **Cards:** `bg #111116`, `border 1px solid #27272F`, `border-radius 16px`, `padding 24px`
-Hover: border → `#3A3A45`, `box-shadow: 0 0 0 1px #3A3A45`
+Hover: `scale(1.02)`, border → `#F97316` at 60% opacity, `transition-all 200ms`, `cursor-pointer`
+Tailwind: `hover:scale-[1.02] hover:border-orange-500/60 transition-all duration-200 cursor-pointer`
+
+**Number squares (card headers):** `w-10 h-10 rounded-[8px] border border-[#F97316] flex items-center justify-center text-sm font-bold text-[#F97316]`
+Used consistently across all numbered card groups.
+
+**Card groups on the page:**
+- Situacija rinkoje: `grid-cols-3`
+- Kaip veikia RaskAI: `grid-cols-5` (mobile: `grid-cols-1`), `min-h-[420px]` per card
+- AI kūrėjams: `grid-cols-4` (md: `grid-cols-2`)
+- Provider two-column: `flex-row gap-8 max-w-[1040px] mx-auto`
+- Stats: `grid-cols-3`
+
+All card grids use `items-stretch` + `h-full flex flex-col` for equal heights.
 
 **Inputs:** `bg #09090B`, `border 1px solid #27272F`, `border-radius 10px`, `padding 12px 14px`
 Focus: border `#F9731640`, outline `2px solid #F973161A`. Placeholder: `#55555F`
@@ -324,17 +338,23 @@ PATCH /v0/appnGWOBl6D4eTOhh/tblTUSy2Qwz3xKePS/{proposal_id}
 ```
 raskai.lt/
 ├── app/
-│   ├── page.tsx          # Pagrindinis
-│   ├── quote/
-│   │   └── page.tsx      # Magic link landing
-│   ├── how-it-works/
-│   │   └── page.tsx
-│   └── layout.tsx        # Root layout su SEO
+│   ├── page.tsx                        # Pagrindinis puslapis (visas UI)
+│   ├── layout.tsx                      # Root layout — Inter font, metadata
+│   ├── globals.css
+│   ├── api/
+│   │   ├── intake/route.ts             # POST: problema + email → REQUESTS Airtable
+│   │   ├── provider-signup/route.ts    # POST: tiekėjo registracija → PROVIDER_ENTITIES
+│   │   └── quote/route.ts              # Magic link quote submission
+│   └── quote/page.tsx                  # Magic link landing (tiekėjams)
 ├── components/
-│   ├── QuoteForm.tsx
-│   └── DeclineConfirm.tsx
+│   └── ui/
+│       ├── particles-bg.tsx            # React.memo tsParticles background
+│       ├── typewriter-textarea.tsx     # Isolated typewriter + textarea
+│       ├── query-examples-modal.tsx    # "Gerų užklausų pavyzdžiai" modal
+│       └── provider-info-modal.tsx     # "Kaip veikia tiekėjų atranka?" modal
 ├── lib/
-│   └── airtable.ts       # Airtable API helpers
+│   ├── tiers.ts                        # Tier1/Tier2 struktūra + getTier2ForTier1()
+│   └── query-examples.ts              # 14 QueryExample objektai su whyGood[]
 ├── public/
 │   └── llms.txt
 └── CLAUDE.md
@@ -369,6 +389,44 @@ export async function updateProposal(proposalId: string, fields: Record<string, 
   return res.json()
 }
 ```
+
+---
+
+## KOMPONENTŲ PASTABOS
+
+### ParticlesBg (`components/ui/particles-bg.tsx`)
+- Wrapped in `React.memo` — NIEKADA nepridėk `key` prop ar kitų kintamų props
+- `OPTIONS` konstanta yra module-level (ne viduje komponento) — tai esminis flickering fix
+- Naudoja tsParticles v3 API: `initParticlesEngine` + `useState(false)` ready flag
+- **Ne** v2 API (`init` prop ant `<Particles>` — tai v2, neveikia v3)
+- `detectsOn: 'window'` — svarbu kad interaktyvumas veiktų
+
+### TypewriterTextarea (`components/ui/typewriter-textarea.tsx`)
+- Saugo visą typewriter state viduje — NEperduoda jokio typewriter state į parent
+- Tai yra tikslingas architektūrinis sprendimas: typewriter state changes negali triggerinti ParticlesBg re-render
+- Props: `value`, `onChange`, `onShowExamples`
+- Typewriter placeholder veikia kaip `aria-hidden` overlay virš textarea (ne tikras placeholder)
+
+### QueryExamplesModal (`components/ui/query-examples-modal.tsx`)
+- 14 kategorijų, dviejų kolonų layout
+- Kairė: scrollable kategorijų sąrašas
+- Dešinė: pavyzdžio tekstas + 4 `whyGood` bullet'ai
+- Copy su Check ikona (2s feedback) + Use mygtukas
+- Uždaro su Escape arba backdrop click
+
+### ProviderInfoModal (`components/ui/provider-info-modal.tsx`)
+- 4 žingsniai su orange number squares
+- Uždaro su Escape arba backdrop click
+- Triggerinamas "Kaip veikia tiekėjų atranka?" mygtuku
+
+### lib/tiers.ts
+- `tier1Options`: 14 Tier1 objektų `{ id, label }`
+- `tier2Options`: 21 Tier2 objektų `{ id, label, tier1Ids[] }`
+- `getTier2ForTier1(tier1Id)`: grąžina filtruotus Tier2 pagal Tier1
+
+### lib/query-examples.ts
+- `QueryExample` interfeis: `{ tier1Id, categoryLabel, example, whyGood: [string,string,string,string] }`
+- Visi `example` string'ai rašomi kaip template literals (backtick) — lietuviški kabutės `„"` gali nutraukti double-quoted strings
 
 ---
 

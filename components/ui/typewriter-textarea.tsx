@@ -55,7 +55,7 @@ export default function TypewriterTextarea({ value, onChange, onShowExamples }: 
         <button
           type="button"
           onClick={onShowExamples}
-          className="flex items-center gap-1.5 text-sm font-semibold text-[#09090B] bg-[#F97316] hover:bg-[#EA6A08] px-5 py-2.5 rounded-[10px] transition-colors duration-200"
+          className="flex items-center gap-1.5 text-sm font-semibold text-[#F97316] bg-transparent border border-[#F9731650] hover:bg-[#F9731615] px-5 py-2.5 rounded-[10px] transition-colors duration-200"
         >
           <span>✦</span> Gerų užklausų pavyzdžiai
         </button>
@@ -64,7 +64,7 @@ export default function TypewriterTextarea({ value, onChange, onShowExamples }: 
         <textarea
           value={value}
           onChange={e => onChange(e.target.value)}
-          rows={5}
+          rows={3}
           className="w-full bg-[#09090B] border border-[#27272F] rounded-[10px] p-4 text-[#F1F0EE] resize-none focus:outline-none focus:border-[#F9731640] focus:ring-2 focus:ring-[#F973161A] text-base transition-colors duration-120"
         />
         {!value && (
