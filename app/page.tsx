@@ -90,7 +90,7 @@ export default function Home() {
  Aprašyk problemą.<br />
  <span className="text-[#F97316]">AI suranda sprendimą.</span>
  </h1>
- <p className="text-[#F97316] text-sm font-semibold tracking-wide mb-3 max-w-2xl">Ne katalogas. Ne agentūra. — AI paverčia jūsų problemą į galimą sprendimą su paaiškinimu kodėl ir kiek tai kainuoja.</p>
+ <p className="text-[#F97316] text-sm font-semibold tracking-wide mb-3 max-w-2xl">Ne katalogas. Ne agentūra. — RaskAI paverčia jūsų problemą į galimą sprendimą su paaiškinimu kodėl ir kiek tai kainuoja.</p>
  <p className="text-zinc-200 text-lg mb-10 max-w-2xl leading-relaxed">
  RaskAI sujungia verslo problemas su atrinktais AI Kūrėjais. Be laiko švaistymo. Jūsų problema + atrinkti AI kūrėjai = sprendimas būtent jums.
  </p>
@@ -141,7 +141,7 @@ export default function Home() {
  <span className="hidden sm:block text-zinc-700">→</span>
  <span className="flex items-center gap-1.5"><span className="text-[#F97316] font-semibold">02</span> Tiekėjai pateikia pasiūlymus (48h)</span>
  <span className="hidden sm:block text-zinc-700">→</span>
- <span className="flex items-center gap-1.5"><span className="text-[#F97316] font-semibold">03</span> Gauni shortlist&apos;ą su kainomis</span>
+ <span className="flex items-center gap-1.5"><span className="text-[#F97316] font-semibold">03</span> Gauni sprendimą su kainomis</span>
  </div>
  </form>
  )}
@@ -278,7 +278,7 @@ export default function Home() {
  {
  step: '3',
  tag: 'PALYGINIMAS',
- title:"Gauni shortlist'ą",
+ title:'Gauni sprendimą',
  body: 'Pamatysi 3 pasiūlymus su kainomis, terminais ir paaiškinimu kodėl kiekvienas tinka.',
  },
  {
