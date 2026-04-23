@@ -90,6 +90,7 @@ export default function Home() {
  Aprašyk problemą.<br />
  <span className="text-[#F97316]">AI suranda sprendimą.</span>
  </h1>
+ <p className="text-[#F97316] text-sm font-semibold tracking-wide mb-3 max-w-2xl">Ne katalogas. Ne agentūra. — AI paverčia jūsų problemą į shortlist&apos;ą su paaiškinimu kodėl.</p>
  <p className="text-zinc-200 text-lg mb-10 max-w-2xl leading-relaxed">
  RaskAI sujungia verslo problemas su atrinktais AI Kūrėjais. Be laiko švaistymo. Jūsų problema + atrinkti AI kūrėjai = sprendimas būtent jums.
  </p>
@@ -134,6 +135,13 @@ export default function Home() {
  <div className="mt-3 flex flex-col gap-1">
  <p className="text-[13px] text-zinc-300">Užklausa ir AI analizė — nemokama. Tiekėjams perduodamos tik patvirtintos užklausos.</p>
  <p className="text-[12px] text-zinc-300">Jei norite tik pasitikrinti kryptį ar kainos rėžį — galite tai padaryti be įsipareigojimo.</p>
+ </div>
+ <div className="mt-5 flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4 text-xs text-zinc-500">
+ <span className="flex items-center gap-1.5"><span className="text-[#F97316] font-semibold">01</span> AI analizuoja užklausą (~2 min)</span>
+ <span className="hidden sm:block text-zinc-700">→</span>
+ <span className="flex items-center gap-1.5"><span className="text-[#F97316] font-semibold">02</span> Tiekėjai pateikia pasiūlymus (48h)</span>
+ <span className="hidden sm:block text-zinc-700">→</span>
+ <span className="flex items-center gap-1.5"><span className="text-[#F97316] font-semibold">03</span> Gauni shortlist&apos;ą su kainomis</span>
  </div>
  </form>
  )}
@@ -194,6 +202,25 @@ export default function Home() {
  </section>
 
  {/* PROBLEMA */}
+ <div className="px-6 py-5 bg-[#111116] border-y border-[#1C1C23]">
+ <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-10">
+ <span className="flex items-center gap-2 text-sm text-zinc-300">
+ <span className="text-[#F97316] font-bold">✓</span>
+ Tik patvirtintos užklausos perduodamos tiekėjams
+ </span>
+ <span className="hidden sm:block text-zinc-700">|</span>
+ <span className="flex items-center gap-2 text-sm text-zinc-300">
+ <span className="text-[#F97316] font-bold">✓</span>
+ AI pateikia kainos rėžį prieš bet kokį kontaktą
+ </span>
+ <span className="hidden sm:block text-zinc-700">|</span>
+ <span className="flex items-center gap-2 text-sm text-zinc-300">
+ <span className="text-[#F97316] font-bold">✓</span>
+ Vertinamas fit, o ne pigiausias pasiūlymas
+ </span>
+ </div>
+ </div>
+
  <section className="px-6 py-24 max-w-6xl mx-auto">
  <p className="text-xs text-zinc-300 tracking-widest uppercase mb-4">Situacija rinkoje</p>
  <h2 className="font-extrabold text-3xl md:text-4xl mb-16 max-w-2xl leading-tight">
@@ -229,7 +256,7 @@ export default function Home() {
  </section>
 
  {/* KAIP VEIKIA */}
- <section className="px-6 py-24 bg-[#0d0d0d]">
+ <section id="how" className="px-6 py-24 bg-[#0d0d0d]">
  <div className="max-w-6xl mx-auto">
  <p className="text-xs text-zinc-300 tracking-widest uppercase mb-4">Procesas</p>
  <h2 className="font-extrabold text-3xl md:text-4xl mb-16">Kaip veikia RaskAI</h2>
@@ -502,13 +529,19 @@ export default function Home() {
 
  {/* FOOTER */}
  <footer className="px-6 py-12 border-t border-[#1C1C23]">
- <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
- <span className="font-bold text-[#F97316]">
- ■ <span className="text-[#F1F0EE]">RaskAI</span>
- <span className="text-zinc-300 font-normal">.lt</span>
- </span>
- <span className="text-zinc-300 text-sm">info@raskai.lt</span>
- <span className="text-[#27272F] text-xs">© 2026 RaskAI · Vilnius, Lithuania</span>
+ <div className="max-w-6xl mx-auto flex flex-col gap-8">
+ <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+ <span className="font-bold text-[#F97316]">■ <span className="text-[#F1F0EE]">RaskAI</span><span className="text-zinc-300 font-normal">.lt</span></span>
+ <div className="flex items-center gap-6">
+ <a href="#provider" className="text-zinc-400 text-sm hover:text-zinc-200 transition-colors duration-200">Tiekėjams</a>
+ <a href="#how" className="text-zinc-400 text-sm hover:text-zinc-200 transition-colors duration-200">Kaip veikia</a>
+ <a href="mailto:info@raskai.lt" className="text-zinc-400 text-sm hover:text-zinc-200 transition-colors duration-200">Kontaktas</a>
+ </div>
+ </div>
+ <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 pt-6 border-t border-[#1C1C23]">
+ <span className="text-zinc-500 text-xs">© 2026 RaskAI · Vilnius, Lithuania · Beta versija</span>
+ <a href="mailto:info@raskai.lt" className="text-zinc-500 text-xs hover:text-zinc-300 transition-colors duration-200">info@raskai.lt</a>
+ </div>
  </div>
  </footer>
 
