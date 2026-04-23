@@ -111,6 +111,10 @@ export default function Home() {
  >
  Rasti sprendimą →
  </button>
+ <div className="mt-3 flex flex-col gap-1">
+ <p className="text-[13px] text-zinc-300">Užklausa ir AI analizė — nemokama. Tiekėjams perduodamos tik patvirtintos užklausos.</p>
+ <p className="text-[12px] text-zinc-500">Jei norite tik pasitikrinti kryptį ar kainos rėžį — galite tai padaryti be įsipareigojimo.</p>
+ </div>
  </form>
  )}
 
