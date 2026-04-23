@@ -90,7 +90,7 @@ export default function Home() {
  Aprašyk problemą.<br />
  <span className="text-[#F97316]">AI suranda sprendimą.</span>
  </h1>
- <p className="text-[#F97316] text-sm font-semibold tracking-wide mb-3 max-w-2xl">Ne katalogas. Ne agentūra. — AI paverčia jūsų problemą į shortlist&apos;ą su paaiškinimu kodėl.</p>
+ <p className="text-[#F97316] text-sm font-semibold tracking-wide mb-3 max-w-2xl">Ne katalogas. Ne agentūra. — AI paverčia jūsų problemą į galimą sprendimą su paaiškinimu kodėl ir kiek tai kainuoja.</p>
  <p className="text-zinc-200 text-lg mb-10 max-w-2xl leading-relaxed">
  RaskAI sujungia verslo problemas su atrinktais AI Kūrėjais. Be laiko švaistymo. Jūsų problema + atrinkti AI kūrėjai = sprendimas būtent jums.
  </p>
