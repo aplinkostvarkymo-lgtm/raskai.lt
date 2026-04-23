@@ -38,11 +38,11 @@ export default function QueryExamplesModal({ onClose, onUse }: Props) {
         <div className="flex items-center justify-between px-6 py-4 border-b border-[#27272F] flex-shrink-0">
           <div>
             <h2 className="font-bold text-base text-[#F1F0EE]">Gerų užklausų pavyzdžiai</h2>
-            <p className="text-xs text-[#55555F] mt-0.5">Pasirink kategoriją ir naudok pavyzdį kaip šabloną</p>
+            <p className="text-xs text-zinc-300 mt-0.5">Pasirink kategoriją ir naudok pavyzdį kaip šabloną</p>
           </div>
           <button
             onClick={onClose}
-            className="w-8 h-8 flex items-center justify-center rounded-[8px] text-[#55555F] hover:text-[#F1F0EE] hover:bg-[#1C1C23] transition-colors"
+            className="w-8 h-8 flex items-center justify-center rounded-[8px] text-zinc-300 hover:text-[#F1F0EE] hover:bg-[#1C1C23] transition-colors"
           >
             <X size={16} />
           </button>

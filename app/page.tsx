@@ -1,14 +1,15 @@
 'use client';
 import { useState } from 'react';
-import { ChevronRight } from 'lucide-react';
 import ParticlesBg from '@/components/ui/particles-bg';
 import TypewriterTextarea from '@/components/ui/typewriter-textarea';
 import { tier1Options, getTier2ForTier1 } from '@/lib/tiers';
 import QueryExamplesModal from '@/components/ui/query-examples-modal';
+import ProviderInfoModal from '@/components/ui/provider-info-modal';
 
 export default function Home() {
  const [formData, setFormData] = useState({ name: '', email: '', company: '', tier1: '', tier2Skills: [] as string[] });
  const [showExamples, setShowExamples] = useState(false);
+ const [showProviderInfo, setShowProviderInfo] = useState(false);
  const [providerSuccess, setProviderSuccess] = useState(false);
 
  async function handleSubmit(e: React.FormEvent) {
@@ -68,23 +69,14 @@ export default function Home() {
  <span className="font-bold tracking-tight text-lg text-[#F1F0EE]">
  <span className="text-[#F97316]">■</span> RaskAI
  </span>
- <span className="hidden sm:inline text-[#55555F] text-xs">· Powered by Robertas + Claude</span>
+ <span className="hidden sm:inline text-zinc-300 text-xs">· Powered by Robertas + Claude</span>
  </div>
- <div className="flex items-center">
- <button
- type="button"
- onClick={() => document.getElementById('provider')?.scrollIntoView({ behavior: 'smooth' })}
- className="text-sm text-zinc-400 hover:text-zinc-200 hover:underline transition-colors duration-200 mr-4 no-underline"
- >
- Esu AI kūrėjas
- </button>
  <a
  href="#provider"
  className="text-sm font-medium border border-[#F9731640] text-[#F97316] hover:bg-[#F97316] hover:text-[#09090B] transition-all duration-200 px-4 py-1.5 rounded-[10px]"
  >
  Tapk tiekėju →
  </a>
- </div>
  </div>
  </nav>
 
@@ -113,7 +105,7 @@ export default function Home() {
  <div key={i} className="flex items-center flex-1 min-w-0">
  <div className="flex items-center gap-2 min-w-0">
  <div className={`w-5 h-5 rounded-full flex-shrink-0 ${s.active ? 'bg-[#F97316]' : 'bg-[#27272F]'}`} />
- <span className={`text-xs font-medium whitespace-nowrap ${s.active ? 'text-[#F1F0EE]' : 'text-zinc-500'}`}>
+ <span className={`text-xs font-medium whitespace-nowrap ${s.active ? 'text-[#F1F0EE]' : 'text-zinc-300'}`}>
  <span className="hidden md:inline">{s.desktop}</span>
  <span className="md:hidden">{s.mobile}</span>
  </span>
@@ -142,7 +134,7 @@ export default function Home() {
  </button>
  <div className="mt-3 flex flex-col gap-1">
  <p className="text-[13px] text-zinc-300">Užklausa ir AI analizė — nemokama. Tiekėjams perduodamos tik patvirtintos užklausos.</p>
- <p className="text-[12px] text-zinc-500">Jei norite tik pasitikrinti kryptį ar kainos rėžį — galite tai padaryti be įsipareigojimo.</p>
+ <p className="text-[12px] text-zinc-300">Jei norite tik pasitikrinti kryptį ar kainos rėžį — galite tai padaryti be įsipareigojimo.</p>
  </div>
  </form>
  )}
@@ -192,7 +184,7 @@ export default function Home() {
  )}
 
  {intakeStep !== 'success' && (
- <p className="mt-8 text-[#55555F] text-sm">
+ <p className="mt-8 text-zinc-300 text-sm">
  Esi AI tiekėjas?{' '}
  <a href="#provider"className="text-zinc-200 hover:text-[#F1F0EE] underline transition-colors duration-120">
  Registruokis čia →
@@ -204,11 +196,11 @@ export default function Home() {
 
  {/* PROBLEMA */}
  <section className="px-6 py-24 max-w-6xl mx-auto">
- <p className="text-xs text-white/30 tracking-widest uppercase mb-4">Situacija rinkoje</p>
+ <p className="text-xs text-zinc-300 tracking-widest uppercase mb-4">Situacija rinkoje</p>
  <h2 className="font-extrabold text-3xl md:text-4xl mb-16 max-w-2xl leading-tight">
  Norisi AI sprendimo,<br />bet nežinai nuo ko pradėti.
  </h2>
- <div className="grid md:grid-cols-3 gap-px bg-white/5">
+ <div className="grid md:grid-cols-3 gap-4 items-stretch">
  {[
  {
  num: '01',
@@ -226,9 +218,11 @@ export default function Home() {
  body: 'Niekas nepasakys kainos kol neišsiunčia pasiūlymo. O pasiūlymai — skiriasi 5 kartus be aiškios priežasties.',
  },
  ].map((item) => (
- <div key={item.num} className="bg-[#111116] p-8 md:p-10">
- <span className="text-xs text-[#55555F] mb-6 block">{item.num}</span>
- <h3 className="font-bold text-lg mb-3">{item.title}</h3>
+ <div key={item.num} className="bg-[#111116] border border-[#27272F] rounded-[16px] p-6 flex flex-col gap-4 h-full hover:scale-[1.02] hover:border-orange-500/60 transition-all duration-200 cursor-pointer">
+ <div className="w-10 h-10 rounded-[8px] border border-[#F97316] flex items-center justify-center flex-shrink-0">
+ <span className="text-sm font-bold text-[#F97316]">{item.num}</span>
+ </div>
+ <h3 className="font-bold text-lg mb-1">{item.title}</h3>
  <p className="text-zinc-200 text-sm leading-relaxed">{item.body}</p>
  </div>
  ))}
@@ -238,10 +232,10 @@ export default function Home() {
  {/* KAIP VEIKIA */}
  <section className="px-6 py-24 bg-[#0d0d0d]">
  <div className="max-w-6xl mx-auto">
- <p className="text-xs text-white/30 tracking-widest uppercase mb-4">Procesas</p>
+ <p className="text-xs text-zinc-300 tracking-widest uppercase mb-4">Procesas</p>
  <h2 className="font-extrabold text-3xl md:text-4xl mb-16">Kaip veikia RaskAI</h2>
 
- <div className="flex flex-col md:flex-row md:items-start gap-0">
+ <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
  {[
  {
  step: '1',
@@ -273,23 +267,16 @@ export default function Home() {
  title: 'Gaunate veikiančią AI sistemą',
  body: 'Sumokėjęs gaunate būtent Jums suprojektuotą ir veikiančią AI sistemą. Ne konceptą — realų, veikiantį sprendimą.',
  },
- ].map((item, index, arr) => (
- <div key={item.step} className="flex flex-col md:flex-row md:items-start flex-1 min-w-0">
- <div className="flex-1 min-w-0 mb-8 md:mb-0">
- <div className="w-14 h-14 border border-[#F9731640] flex items-center justify-center mb-6">
- <span className="text-xl font-black text-[#F97316]">{item.step}</span>
+ ].map((item) => (
+ <div key={item.step} className="w-full bg-[#111116] border border-[#27272F] rounded-[16px] p-6 flex flex-col min-h-[420px] hover:scale-[1.02] hover:border-orange-500/60 transition-all duration-200 cursor-pointer">
+ <div className="w-10 h-10 rounded-[8px] border border-[#F97316] flex items-center justify-center mb-5 flex-shrink-0">
+ <span className="text-sm font-bold text-[#F97316]">{item.step}</span>
  </div>
- <div className="inline-block border border-[#F9731620] bg-[#F973160D] px-2 py-0.5 mb-4 rounded-[4px]">
- <span className="text-[10px] text-[#F97316]/50 tracking-widest uppercase">{item.tag}</span>
+ <div className="inline-block border border-[#F9731620] bg-[#F973160D] px-2 py-0.5 mb-4 rounded-[4px] self-start">
+ <span className="text-[10px] text-[#F97316]/50 tracking-widest uppercase whitespace-nowrap">{item.tag}</span>
  </div>
  <h3 className="font-bold text-base mb-3">{item.title}</h3>
  <p className="text-zinc-200 text-sm leading-relaxed">{item.body}</p>
- </div>
- {index < arr.length - 1 && (
- <div className="hidden md:flex items-start justify-center pt-6 px-2 flex-shrink-0">
- <ChevronRight size={24} className="text-[#F97316]/60 animate-pulse" />
- </div>
- )}
  </div>
  ))}
  </div>
@@ -299,15 +286,15 @@ export default function Home() {
  {/* AI KŪRĖJAMS SEKCIJA */}
  <section className="px-6 py-24 bg-[#0d0d0d]">
  <div className="max-w-6xl mx-auto">
- <p className="text-xs text-white/30 tracking-widest uppercase mb-4">AI KŪRĖJAMS</p>
+ <p className="text-xs text-zinc-300 tracking-widest uppercase mb-4">AI KŪRĖJAMS</p>
  <h2 className="font-extrabold text-3xl md:text-4xl mb-4 max-w-2xl leading-tight">
  Kodėl man verta prisijungti prie RaskAI
  </h2>
- <p className="text-zinc-400 text-base mb-14 max-w-2xl leading-relaxed">
+ <p className="text-zinc-300 text-base mb-14 max-w-2xl leading-relaxed">
  RaskAI skirtas AI kūrėjams, kurie nori mažiau pitch&apos;inti, mažiau deginti laiką ant tuščių užklausų ir daugiau dirbti su realiu poreikiu.
  </p>
 
- <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 mb-14">
+ <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 mb-14 items-stretch">
  {[
  {
  title: 'Mažiau tuščio triukšmo',
@@ -325,32 +312,34 @@ export default function Home() {
  title: 'Verified statusas kuria pranašumą',
  text: 'Patikimi AI kūrėjai tampa matomesni sistemoje, o jų reputacija remiasi ne marketingu, o elgsena ir rezultatais.',
  },
- ].map((card) => (
- <div key={card.title} className="bg-[#111116] border border-[#1C1C23] rounded-[12px] p-6 flex flex-col gap-3">
- <div className="w-1 h-5 bg-[#F97316] rounded-full" />
+ ].map((card, i) => (
+ <div key={card.title} className="bg-[#111116] border border-[#27272F] rounded-[16px] p-6 flex flex-col gap-4 h-full hover:scale-[1.02] hover:border-orange-500/60 transition-all duration-200 cursor-pointer">
+ <div className="w-10 h-10 rounded-[8px] border border-[#F97316] flex items-center justify-center flex-shrink-0">
+ <span className="text-sm font-bold text-[#F97316]">{i + 1}</span>
+ </div>
  <h3 className="font-semibold text-[#F1F0EE] text-sm leading-snug">{card.title}</h3>
- <p className="text-zinc-400 text-sm leading-relaxed">{card.text}</p>
+ <p className="text-zinc-300 text-sm leading-relaxed">{card.text}</p>
  </div>
  ))}
  </div>
 
- <div id="provider" className="flex flex-col md:flex-row gap-12 items-start mt-16">
+ <div id="provider" className="flex flex-col md:flex-row gap-8 items-stretch mt-16 mx-auto max-w-[1040px]">
  {/* LEFT: how it works + CTA */}
- <div className="w-full md:w-[420px] flex-shrink-0">
- <p className="text-xs text-white/30 tracking-widest uppercase mb-4">Kaip tai veikia kūrėjui?</p>
- <ul className="flex flex-col gap-4 mb-5">
+ <div className="flex-1 max-w-[500px] bg-[#111116] border border-[#27272F] rounded-[16px] p-6 flex flex-col h-full hover:scale-[1.02] hover:border-orange-500/60 transition-all duration-200 cursor-pointer">
+ <p className="text-xs text-zinc-300 tracking-widest uppercase mb-6">Kaip tai veikia kūrėjui?</p>
+ <ul className="flex flex-col gap-4 mb-5 flex-1">
  {[
  'Prisijungiate kaip AI kūrėjas',
  'RaskAI atrenka tik jums tinkamas užklausas',
  'Gavę kvietimą sprendžiate, ar norite dalyvauti',
  ].map((item, i) => (
  <li key={i} className="flex items-start gap-3 text-sm text-zinc-300">
- <span className="mt-0.5 w-5 h-5 rounded-full border border-[#F97316]/40 flex items-center justify-center flex-shrink-0 text-[10px] text-[#F97316]">{i + 1}</span>
- {item}
+ <span className="w-10 h-10 rounded-[8px] border border-[#F97316] flex items-center justify-center flex-shrink-0 text-sm font-bold text-[#F97316]">{i + 1}</span>
+ <span className="mt-3">{item}</span>
  </li>
  ))}
  </ul>
- <p className="text-xs text-zinc-500 mb-8">Tikslas — mažiau beverčių lead&apos;ų, daugiau tikslingų galimybių.</p>
+ <p className="text-xs text-zinc-300 mb-8">Tikslas — mažiau beverčių lead&apos;ų, daugiau tikslingų galimybių.</p>
  <div className="flex flex-col sm:flex-row gap-3 items-start">
  <a
  href="#provider"
@@ -360,8 +349,8 @@ export default function Home() {
  </a>
  <button
  type="button"
- onClick={() => document.getElementById('provider')?.scrollIntoView({ behavior: 'smooth' })}
- className="text-sm text-zinc-400 hover:text-zinc-200 hover:underline transition-colors duration-200 py-2.5"
+ onClick={() => setShowProviderInfo(true)}
+ className="text-sm text-zinc-300 hover:text-zinc-200 hover:underline transition-colors duration-200 py-2.5"
  >
  Kaip veikia tiekėjų atranka?
  </button>
@@ -369,7 +358,7 @@ export default function Home() {
  </div>
 
  {/* FORMA */}
- <div className="border border-[#F97316]/30 bg-zinc-900/80 rounded-[16px] p-8 shadow-[0_0_40px_rgba(249,115,22,0.15)]">
+ <div className="flex-1 max-w-[500px] bg-[#111116] border border-[#27272F] rounded-[16px] p-6 flex flex-col h-full">
  {providerSuccess ? (
  <div className="text-center py-8">
  <div className="w-12 h-12 border border-[#F97316] flex items-center justify-center mx-auto mb-4 rounded-[10px]">
@@ -383,7 +372,7 @@ export default function Home() {
  ) : (
  <>
  <h3 className="font-bold text-lg mb-1">Tapk verified tiekėju</h3>
- <p className="text-zinc-400 text-sm mb-6">Pirmieji 10 tiekėjų — nemokamas Verified-2 statusas</p>
+ <p className="text-zinc-300 text-sm mb-6">Pirmieji 10 tiekėjų — nemokamas Verified-2 statusas</p>
 
  <form onSubmit={handleSubmit} className="space-y-4">
  <div>
@@ -497,13 +486,13 @@ export default function Home() {
  {/* SOCIAL PROOF */}
  <section className="px-6 py-16 bg-[#0d0d0d]">
  <div className="max-w-6xl mx-auto">
- <div className="grid md:grid-cols-3 gap-px bg-white/5">
+ <div className="grid md:grid-cols-3 gap-6">
  {[
  { num: 'Beta', label: 'Platforma šiuo metu testuojama su pirmaisiais tiekėjais' },
  { num: '15%', label: 'Komisinis tik nuo sėkmingo sandorio. Jokių kitų mokesčių.' },
  { num: '48h', label: 'Tiekėjai pateikia pasiūlymus per 48 val. po užklausos' },
  ].map((item) => (
- <div key={item.label} className="bg-[#111116] px-8 py-10">
+ <div key={item.label} className="bg-[#111116] border border-[#27272F] rounded-[16px] p-6 hover:scale-[1.02] hover:border-orange-500/60 transition-all duration-200 cursor-pointer">
  <div className="text-3xl font-black text-[#F97316] mb-2">{item.num}</div>
  <p className="text-zinc-200 text-sm leading-relaxed">{item.label}</p>
  </div>
@@ -517,9 +506,9 @@ export default function Home() {
  <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
  <span className="font-bold text-[#F97316]">
  ■ <span className="text-[#F1F0EE]">RaskAI</span>
- <span className="text-[#55555F] font-normal">.lt</span>
+ <span className="text-zinc-300 font-normal">.lt</span>
  </span>
- <span className="text-[#55555F] text-sm">info@raskai.lt</span>
+ <span className="text-zinc-300 text-sm">info@raskai.lt</span>
  <span className="text-[#27272F] text-xs">© 2026 RaskAI · Vilnius, Lithuania</span>
  </div>
  </footer>
@@ -531,6 +520,9 @@ export default function Home() {
  onClose={() => setShowExamples(false)}
  onUse={text => { setProblem(text); setShowExamples(false); }}
  />
+ )}
+ {showProviderInfo && (
+ <ProviderInfoModal onClose={() => setShowProviderInfo(false)} />
  )}
  </>
  );
