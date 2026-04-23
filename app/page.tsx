@@ -70,12 +70,21 @@ export default function Home() {
  </span>
  <span className="hidden sm:inline text-[#55555F] text-xs">· Powered by Robertas + Claude</span>
  </div>
+ <div className="flex items-center">
+ <button
+ type="button"
+ onClick={() => document.getElementById('provider')?.scrollIntoView({ behavior: 'smooth' })}
+ className="text-sm text-zinc-400 hover:text-zinc-200 hover:underline transition-colors duration-200 mr-4 no-underline"
+ >
+ Esu AI kūrėjas
+ </button>
  <a
  href="#provider"
  className="text-sm font-medium border border-[#F9731640] text-[#F97316] hover:bg-[#F97316] hover:text-[#09090B] transition-all duration-200 px-4 py-1.5 rounded-[10px]"
  >
  Tapk tiekėju →
  </a>
+ </div>
  </div>
  </nav>
 
@@ -93,6 +102,26 @@ export default function Home() {
  <p className="text-zinc-200 text-lg mb-10 max-w-2xl leading-relaxed">
  RaskAI sujungia verslo problemas su atrinktais AI Kūrėjais. Be laiko švaistymo. Jūsų problema + atrinkti AI kūrėjai = sprendimas būtent jums.
  </p>
+
+ {/* 3-STEP PROGRESS INDICATOR */}
+ <div className="flex items-center max-w-2xl mb-4">
+ {[
+ { desktop: '1 · Aprašai problemą', mobile: '1 · Aprašai', active: true },
+ { desktop: '2 · Gauni AI analizę', mobile: '2 · AI analizė', active: false },
+ { desktop: '3 · Pasirenki ką daryti toliau', mobile: '3 · Pasirenki', active: false },
+ ].map((s, i) => (
+ <div key={i} className="flex items-center flex-1 min-w-0">
+ <div className="flex items-center gap-2 min-w-0">
+ <div className={`w-5 h-5 rounded-full flex-shrink-0 ${s.active ? 'bg-[#F97316]' : 'bg-[#27272F]'}`} />
+ <span className={`text-xs font-medium whitespace-nowrap ${s.active ? 'text-[#F1F0EE]' : 'text-zinc-500'}`}>
+ <span className="hidden md:inline">{s.desktop}</span>
+ <span className="md:hidden">{s.mobile}</span>
+ </span>
+ </div>
+ {i < 2 && <div className="flex-1 mx-2 h-px bg-[#27272F] min-w-[8px]" />}
+ </div>
+ ))}
+ </div>
 
  {intakeStep === 'idle' && (
  <form onSubmit={handleIntakeSubmit} className="flex flex-col gap-4 max-w-2xl">
@@ -267,32 +296,75 @@ export default function Home() {
  </div>
  </section>
 
- {/* PROVIDER SEKCIJA */}
- <section id="provider"className="px-6 py-24 max-w-6xl mx-auto">
- <div className="grid md:grid-cols-2 gap-16 items-start">
- <div>
- <p className="text-xs text-[#F97316]/60 tracking-widest uppercase mb-4">AI tiekėjams</p>
- <h2 className="font-extrabold text-3xl md:text-4xl mb-6 leading-tight">
- Tu kuri AI sprendimus ir sistemas?<br />
- Mes atvedame klientus.
+ {/* AI KŪRĖJAMS SEKCIJA */}
+ <section className="px-6 py-24 bg-[#0d0d0d]">
+ <div className="max-w-6xl mx-auto">
+ <p className="text-xs text-white/30 tracking-widest uppercase mb-4">AI KŪRĖJAMS</p>
+ <h2 className="font-extrabold text-3xl md:text-4xl mb-4 max-w-2xl leading-tight">
+ Kodėl man verta prisijungti prie RaskAI
  </h2>
- <p className="text-zinc-200 mb-10 leading-relaxed">
- Dauguma gerų AI specialistų praleidžia 30–40% laiko ieškodami klientų.
- RaskAI pašalina šį kaštą — tu gauni tik jau suinteresuotus lead'us.
+ <p className="text-zinc-400 text-base mb-14 max-w-2xl leading-relaxed">
+ RaskAI skirtas AI kūrėjams, kurie nori mažiau pitch&apos;inti, mažiau deginti laiką ant tuščių užklausų ir daugiau dirbti su realiu poreikiu.
  </p>
 
- <div className="space-y-4">
+ <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 mb-14">
  {[
-"Moki 15% tik nuo sėkmingo sandorio — ne už lead'us",
-"Gauni struktūrizuotą brief'ą su biudžetu ir terminais",
- 'Verified statusas — klientai mato tave kaip patikrintą specialistą',
-"Nereikia pitch'inti — tik pateiki kainą ir pagrindimą",
- ].map((item) => (
- <div key={item} className="flex items-start gap-3">
- <span className="text-[#F97316] mt-0.5 text-lg leading-none">✓</span>
- <span className="text-zinc-200 text-sm leading-relaxed">{item}</span>
+ {
+ title: 'Mažiau tuščio triukšmo',
+ text: 'RaskAI filtruoja smalsumą nuo realios intencijos. Tik patvirtintos A tipo užklausos pereina į realų tiekėjų etapą.',
+ },
+ {
+ title: "Aiškesnis brief'as",
+ text: 'Jūs gaunate ne chaotišką „reikia AI", o AI susistemintą problemos kryptį, kainos rėžį ir aiškesnį poreikį.',
+ },
+ {
+ title: 'Vertinamas fit, ne tik kaina',
+ text: 'RaskAI logika orientuota į atitikimą ir tikėtiną rezultatą, o ne į lenktynes kas pasiūlys mažiausią kainą.',
+ },
+ {
+ title: 'Verified statusas kuria pranašumą',
+ text: 'Patikimi AI kūrėjai tampa matomesni sistemoje, o jų reputacija remiasi ne marketingu, o elgsena ir rezultatais.',
+ },
+ ].map((card) => (
+ <div key={card.title} className="bg-[#111116] border border-[#1C1C23] rounded-[12px] p-6 flex flex-col gap-3">
+ <div className="w-1 h-5 bg-[#F97316] rounded-full" />
+ <h3 className="font-semibold text-[#F1F0EE] text-sm leading-snug">{card.title}</h3>
+ <p className="text-zinc-400 text-sm leading-relaxed">{card.text}</p>
  </div>
  ))}
+ </div>
+
+ <div id="provider" className="flex flex-col md:flex-row gap-12 items-start mt-16">
+ {/* LEFT: how it works + CTA */}
+ <div className="w-full md:w-[420px] flex-shrink-0">
+ <p className="text-xs text-white/30 tracking-widest uppercase mb-4">Kaip tai veikia kūrėjui?</p>
+ <ul className="flex flex-col gap-4 mb-5">
+ {[
+ 'Prisijungiate kaip AI kūrėjas',
+ 'RaskAI atrenka tik jums tinkamas užklausas',
+ 'Gavę kvietimą sprendžiate, ar norite dalyvauti',
+ ].map((item, i) => (
+ <li key={i} className="flex items-start gap-3 text-sm text-zinc-300">
+ <span className="mt-0.5 w-5 h-5 rounded-full border border-[#F97316]/40 flex items-center justify-center flex-shrink-0 text-[10px] text-[#F97316]">{i + 1}</span>
+ {item}
+ </li>
+ ))}
+ </ul>
+ <p className="text-xs text-zinc-500 mb-8">Tikslas — mažiau beverčių lead&apos;ų, daugiau tikslingų galimybių.</p>
+ <div className="flex flex-col sm:flex-row gap-3 items-start">
+ <a
+ href="#provider"
+ className="text-sm font-semibold bg-[#F97316] hover:bg-[#EA6A08] text-[#09090B] px-6 py-2.5 rounded-[10px] transition-colors duration-200"
+ >
+ Tapti AI kūrėju RaskAI
+ </a>
+ <button
+ type="button"
+ onClick={() => document.getElementById('provider')?.scrollIntoView({ behavior: 'smooth' })}
+ className="text-sm text-zinc-400 hover:text-zinc-200 hover:underline transition-colors duration-200 py-2.5"
+ >
+ Kaip veikia tiekėjų atranka?
+ </button>
  </div>
  </div>
 
@@ -417,6 +489,7 @@ export default function Home() {
  </form>
  </>
  )}
+ </div>
  </div>
  </div>
  </section>
